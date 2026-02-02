@@ -6,6 +6,8 @@ export const codeSnippets: CodeSnippet[] = [
     filename: 'useAuth.ts',
     language: 'typescript',
     difficulty: 'medium',
+    category: 'React Hooks',
+    points: 150,
     code: `// Custom authentication hook
 import { useState, useEffect } from 'react';
 
@@ -43,6 +45,8 @@ export const useAuth = () => {
     filename: 'Button.tsx',
     language: 'typescript',
     difficulty: 'easy',
+    category: 'React Components',
+    points: 100,
     code: `// Reusable button component
 import React from 'react';
 
@@ -84,9 +88,11 @@ export const Button: React.FC<ButtonProps> = ({
   },
   {
     id: '3',
-    filename: 'dataFetching.tsx',
+    filename: 'useFetch.tsx',
     language: 'typescript',
     difficulty: 'hard',
+    category: 'React Hooks',
+    points: 200,
     code: `// Data fetching utilities
 import { useState, useEffect } from 'react';
 
@@ -137,8 +143,10 @@ export function useFetch<T>(url: string): FetchState<T> {
     filename: 'useLocalStorage.ts',
     language: 'typescript',
     difficulty: 'medium',
+    category: 'React Hooks',
+    points: 150,
     code: `// Local storage hook with TypeScript
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export function useLocalStorage<T>(
   key: string,
@@ -171,6 +179,8 @@ export function useLocalStorage<T>(
     filename: 'TodoList.tsx',
     language: 'typescript',
     difficulty: 'easy',
+    category: 'React Components',
+    points: 100,
     code: `// Simple Todo List Component
 import React, { useState } from 'react';
 
@@ -186,10 +196,11 @@ export const TodoList: React.FC = () => {
   
   const addTodo = () => {
     if (input.trim()) {
-      setTodos([
-        ...todos,
-        { id: Date.now(), text: input, completed: false }
-      ]);
+      setTodos([...todos, { 
+        id: Date.now(), 
+        text: input, 
+        completed: false 
+      }]);
       setInput('');
     }
   };
@@ -203,17 +214,14 @@ export const TodoList: React.FC = () => {
   };
   
   return (
-    <div className="p-4">
+    <div>
       <input
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && addTodo()}
-        className="border p-2 rounded"
       />
-      <button onClick={addTodo} className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-        Add
-      </button>
-      <ul className="mt-4">
+      <button onClick={addTodo}>Add</button>
+      <ul>
         {todos.map(todo => (
           <li key={todo.id} onClick={() => toggleTodo(todo.id)}>
             <span className={todo.completed ? 'line-through' : ''}>
@@ -225,5 +233,15 @@ export const TodoList: React.FC = () => {
     </div>
   );
 };`
-  }
+  },
 ];
+
+export const getAvailableSnippets = (level: number): CodeSnippet[] => {
+  return codeSnippets.map((snippet, index) => {
+    const requiresLevel = Math.ceil((index + 1) / 3);
+    return {
+      ...snippet,
+      locked: level < requiresLevel
+    };
+  });
+};
